@@ -1,12 +1,12 @@
-import { UserService } from '../Service/user/userService.js'
+import{TodoService} from '../Service/todoService.js'
 
 
-export class UserController {
+export class TodoController {
 
-    async getUser(req, res, next) {
+    async getTodo(req, res, next) {
         try {
-            const userService = new UserService();
-            const resultItems = await userService.getUser()
+            const todoService = new TodoService();
+            const resultItems = await todoService.getTodo()
             return res.status(200).json(resultItems);
         }
         catch (ex) {
@@ -17,10 +17,10 @@ export class UserController {
         }
     }
 
-    async getUserById(req, res, next) {
+    async getTodoById(req, res, next) {
         try {
-            const userService = new UserService();
-            const resultItem = await userService.getUserById(req.params.id);
+            const todoService = new TodoService();
+            const resultItem = await todoService.getTodoById(req.params.id);
             res.status(200).json({ status: 200, data: resultItem });
         }
         catch (ex) {
@@ -31,10 +31,11 @@ export class UserController {
         }
     }
 
-    async addUser(req, res) {
+    async addTodo(req, res) {
         try {
-            const userService = new UserService();
-            await userService.addUser(req.body);
+            const todoService = new TodoService();
+            console.log(req.body)
+            await todoService.addTodo(req.body);
             res.status(200).json({ status: 200 });
         }
         catch (ex) {
@@ -45,10 +46,10 @@ export class UserController {
         }
     }
 
-    async deleteUser(req, res) {
+    async deleteTodo(req, res) {
         try {
-            const userService = new UserService();
-            await userService.deleteUser(req.params.id);
+            const todoService = new TodoService();
+            await todoService.deleteTodo(req.params.id);
             res.status(200).json({ status: 200 });
         }
         catch (ex) {
@@ -59,10 +60,10 @@ export class UserController {
         }
     }
 
-    async updateUser(req, res) {
+    async updateTodo(req, res) {
         try {
-            const userService = new UserService();
-            await userService.updateUser(req.body);
+            const todoService = new TodoService();
+            await todoService.updateTodo(req.body);
             res.status(200).json({ status: 200 });
         }
         catch (ex) {
