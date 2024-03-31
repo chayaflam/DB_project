@@ -1,12 +1,12 @@
-import { UserService } from '../Service/user/userService.js'
+import{PostService} from '../Service/post/postService.js'
 
 
-export class UserController {
+export class PostController {
 
-    async getUser(req, res, next) {
+    async getPost(req, res, next) {
         try {
-            const userService = new UserService();
-            const resultItems = await userService.getUser()
+            const postService = new PostService();
+            const resultItems = await postService.getPost()
             return res.status(200).json(resultItems);
         }
         catch (ex) {
@@ -17,10 +17,10 @@ export class UserController {
         }
     }
 
-    async getUserById(req, res, next) {
+    async getPostById(req, res, next) {
         try {
-            const userService = new UserService();
-            const resultItem = await userService.getUserById(req.params.id);
+            const postService = new PostService();
+            const resultItem = await postService.getPostById(req.params.id);
             res.status(200).json({ status: 200, data: resultItem });
         }
         catch (ex) {
@@ -31,10 +31,10 @@ export class UserController {
         }
     }
 
-    async addUser(req, res) {
+    async addPost(req, res) {
         try {
-            const userService = new UserService();
-            await userService.addUser(req.body);
+            const postService = new PostService();
+            await postService.addPost(req.body);
             res.status(200).json({ status: 200 });
         }
         catch (ex) {
@@ -45,10 +45,10 @@ export class UserController {
         }
     }
 
-    async deleteUser(req, res) {
+    async deletePost(req, res) {
         try {
-            const userService = new UserService();
-            await userService.deleteUser(req.params.id);
+            const postService = new PostService();
+            await postService.deletePost(req.params.id);
             res.status(200).json({ status: 200 });
         }
         catch (ex) {
@@ -59,10 +59,10 @@ export class UserController {
         }
     }
 
-    async updateUser(req, res) {
+    async updatePost(req, res) {
         try {
-            const userService = new UserService();
-            await userService.updateUser(req.body);
+            const postService = new PostService();
+            await postService.updatePost(req.params);
             res.status(200).json({ status: 200 });
         }
         catch (ex) {

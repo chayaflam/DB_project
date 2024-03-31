@@ -5,13 +5,12 @@ import { UserController } from '../Controller/userController.js'
 const userRouter = express.Router();
 const userController = new UserController()
 
-
 userRouter.get("/", userController.getUser)
 userRouter.get("/:id", userController.getUserById)
-userRouter.post("/", userController.postUser)
+userRouter.post("/", userController.addUser)
+userRouter.delete("/:id", userController.deleteUser)
+userRouter.put("/", userController.updateUser)
 
-// userRouter.post('/', (req, res) => {
-// })
 
 export{
     userRouter

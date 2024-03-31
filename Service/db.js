@@ -2,9 +2,8 @@ import mysql from 'mysql2/promise';
 import 'dotenv/config'
 
 
-async function executeQuery(query, type, params) {
+async function executeQuery(query, params) {
 
-    console.log(type)
     let results;
     const connection = await mysql.createConnection({
         host: 'localhost',
@@ -13,13 +12,8 @@ async function executeQuery(query, type, params) {
         password: process.env.PASSWORD
     });
     try {
-        if (type == "post") {
-            connection.connect();
-            connection.query(query);
-        }
-
-        else if (type == "get")
-            [results] = await connection.execute(query, params);
+        connection.connect();
+        [results] = await connection.execute(query, params);
     } catch (err) {
         console.log(err);
     }
