@@ -1,4 +1,4 @@
-import{PostService} from '../Service/postService.js'
+import { PostService } from '../Service/postService.js'
 
 
 export class PostController {
@@ -34,7 +34,6 @@ export class PostController {
     async addPost(req, res) {
         try {
             const postService = new PostService();
-            console.log(req.body)
             await postService.addPost(req.body);
             res.status(200).json({ status: 200 });
         }
@@ -63,7 +62,7 @@ export class PostController {
     async updatePost(req, res) {
         try {
             const postService = new PostService();
-            await postService.updatePost(req.body);
+            await postService.updatePost(req.params.id, req.body);
             res.status(200).json({ status: 200 });
         }
         catch (ex) {

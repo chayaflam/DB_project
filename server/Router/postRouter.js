@@ -10,7 +10,7 @@ postRouter.get("/", postController.getPost)
 postRouter.get("/:id", postController.getPostById)
 postRouter.post("/", postController.addPost)
 postRouter.delete("/:id", postController.deletePost)
-postRouter.put("/", postController.updatePost)
+postRouter.put("/:id", postController.updatePost)
 
 
 export{

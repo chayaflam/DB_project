@@ -1,4 +1,4 @@
-import{TodoService} from '../Service/todoService.js'
+import { TodoService } from '../Service/todoService.js'
 
 
 export class TodoController {
@@ -34,7 +34,6 @@ export class TodoController {
     async addTodo(req, res) {
         try {
             const todoService = new TodoService();
-            console.log(req.body)
             await todoService.addTodo(req.body);
             res.status(200).json({ status: 200 });
         }
@@ -63,7 +62,7 @@ export class TodoController {
     async updateTodo(req, res) {
         try {
             const todoService = new TodoService();
-            await todoService.updateTodo(req.body);
+            await todoService.updateTodo(req.params.id, req.body);
             res.status(200).json({ status: 200 });
         }
         catch (ex) {

@@ -1,6 +1,6 @@
 
 import { executeQuery } from './db.js';
-import {  getQuery, getByIdQuery, addQuery, deleteQuery, updateQuery } from './queries.js'
+import { getQuery, getByIdQuery, addQuery, deleteQuery, updateQuery } from './queries.js'
 
 export class TodoService {
 
@@ -17,7 +17,7 @@ export class TodoService {
     }
 
     async addTodo(todo) {
-        const queryTodo = addQuery("todos","?,".repeat((Object.keys(todo).length)-1)+"?");
+        const queryTodo = addQuery("todos", "NULL," + "?,".repeat((Object.keys(todo).length)) + "1");
         const result = await executeQuery(queryTodo, Object.values(todo));
         return result;
     }
@@ -28,10 +28,10 @@ export class TodoService {
         return result;
     }
 
-    async updateTodo(todo) {
-        const queryTodo = updateQuery("todos",Object.keys(todo));
-        const result = await executeQuery(queryTodo, Object.values(todo).concat(todo.id));
+    async updateTodo(todoId, todo) {
+        const queryTodo = updateQuery("todos", Object.keys(todo));
+        const result = await executeQuery(queryTodo, Object.values(todo).concat(todoId));
         return result;
     }
-   
+
 }

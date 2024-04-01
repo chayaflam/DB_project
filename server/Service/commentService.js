@@ -16,7 +16,7 @@ export class CommentService {
     }
 
     async addComment(comment) {
-        const queryComment = addQuery("comments", "?,".repeat((Object.keys(comment).length) - 1) + "?");
+        const queryComment = addQuery("comments","NULL,"+ "?,".repeat((Object.keys(comment).length))+"1");
         const result = await executeQuery(queryComment, Object.values(comment));
         return result;
     }
@@ -27,9 +27,9 @@ export class CommentService {
         return result;
     }
 
-    async updateComment(comment) {
+    async updateComment(commentId, comment) {
         const queryComment = updateQuery("comments", Object.keys(comment));
-        const result = await executeQuery(queryComment, Object.values(comment).concat(comment.id));
+        const result = await executeQuery(queryComment, Object.values(comment).concat(commentId));
         return result;
     }
 }

@@ -1,4 +1,4 @@
-import{CommentService} from '../Service/commentService.js'
+import { CommentService } from '../Service/commentService.js'
 
 
 export class CommentController {
@@ -34,7 +34,6 @@ export class CommentController {
     async addComment(req, res) {
         try {
             const commentService = new CommentService();
-            console.log(req.body)
             await commentService.addComment(req.body);
             res.status(200).json({ status: 200 });
         }
@@ -63,7 +62,7 @@ export class CommentController {
     async updateComment(req, res) {
         try {
             const commentService = new CommentService();
-            await commentService.updateComment(req.body);
+            await commentService.updateComment(req.params.id, req.body);
             res.status(200).json({ status: 200 });
         }
         catch (ex) {

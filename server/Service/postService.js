@@ -16,7 +16,7 @@ export class PostService {
     }
 
     async addPost(post) {
-        const queryPost = addQuery("posts", "?,".repeat((Object.keys(post).length) - 1) + "?");
+        const queryPost = addQuery("posts","NULL,"+ "?,".repeat((Object.keys(post).length))+"1");
         const result = await executeQuery(queryPost, Object.values(post));
         return result;
     }
@@ -27,9 +27,9 @@ export class PostService {
         return result;
     }
 
-    async updatePost(post) {
+    async updatePost(postId, post) {
         const queryPost = updateQuery("posts", Object.keys(post));
-        const result = await executeQuery(queryPost, Object.values(post).concat(post.id));
+        const result = await executeQuery(queryPost, Object.values(post).concat(postId));
         return result;
     }
 }

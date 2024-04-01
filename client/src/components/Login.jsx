@@ -26,7 +26,7 @@ export default function Login() {
 
     const loginHandleSubmit = (data) => {
         console.log(data)
-        fetch(`http://localhost:8080/users`)
+        fetch(`${URL}/users`)
             .then(response => response.json())
             .then(json => checkPassword(json[0], data))
             .catch(error => {
