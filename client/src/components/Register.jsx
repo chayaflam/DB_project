@@ -61,17 +61,6 @@ export default function Register() {
             setFormToShow('fullDetailsForm')
     }
 
-    // ////   
-    // const requestOptions = {
-    //     method: 'PATCH',
-    //     headers: { 'Content-Type': 'application/json' },
-    //     body: JSON.stringify({ user: `${parseInt(user.id) + 1}` })
-    // };
-    // fetch('http://localhost:3000/nextId/1', requestOptions)
-    //     .then(response => response.json())
-    //     .then((data) => { });
-    // ///
-
     const addUserToDB = (dbUser, currentUser) => {
         fetch(`${URL}/users`, {
             method: 'POST',

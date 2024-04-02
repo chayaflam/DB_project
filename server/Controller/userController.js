@@ -21,6 +21,7 @@ export class UserController {
         try {
             const userService = new UserService();
             const resultItem = await userService.getUserByUsername(req.params.username);
+            console.log("resultItem  "+resultItem)
             res.status(200).json({ status: 200, data: resultItem });
         }
         catch (ex) {

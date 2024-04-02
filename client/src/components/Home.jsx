@@ -5,14 +5,13 @@ import { UserContext } from "../main";
 // import { RiLogoutCircleRLine } from "react-icons/ri";
 
 
-const buttons = ['INFO', 'TODOS', 'ALBUMS', 'POSTS']
+const buttons = ['INFO', 'TODOS', 'POSTS']
 
 const Home = () => {
     
     const navigate = useNavigate();
     const [user, setUser] = useContext(UserContext)
     const [place, setPlace] = useState()
-
 
     const logout = () => {
         localStorage.clear()
@@ -21,12 +20,12 @@ const Home = () => {
     }
 
     return <>
-        <nav className="navHome"><a onClick={()=>setPlace('home')}><Link to={'.'}><VscAccount/>{user.username}/</Link></a>
+        <nav className="navHome"><a onClick={()=>setPlace('home')}><Link to={'.'}>{user.username}/</Link></a>
             <span>{buttons.map((btn, index) => { return <Link key={index} to={btn.toLowerCase()}><a onClick={()=>setPlace(btn)}>{btn}</a></Link> })}</span>
-            <button id="logout" onClick={() => logout()}>LOGOUT<RiLogoutCircleRLine/></button>
+            <button id="logout" onClick={() => logout()}>LOGOUT</button>
         </nav>
         <Outlet/>
-        {place == 'home' && <div><VscAccount/></div>}
+        {place == 'home' && <div></div>}
     </> 
 }
 export default Home;

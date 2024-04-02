@@ -15,35 +15,33 @@ export default function Login() {
         if (user) {
             fetch(`${URL}/users?username=${user.username}`, {
                 method: "GET"
-                }).then(response => response.json())
+            }).then(response => response.json())
                 .then(json => {
                     if (json) navigate(`/users/${user.username}`)
                 })
                 .catch(error => console.log("Error:", error))
         }
-        else navigate('/login')
+        else navigate('/login');
     }, [])
 
     const loginHandleSubmit = (data) => {
-        console.log(data)
-        fetch(`${URL}/users`)
-            .then(response => response.json())
-            .then(json => checkPassword(json[0], data))
-            .catch(error => {
-                console.log("Error", error)
-                alert('you need to register')
-            })
+        fetch(`http://localhost:8080/auth/login`, {
+            method: "POST",
+            headers:{'Content-Type':'application/json'},
+            body: JSON.stringify(data)
+        }).then((response) => {
+            if (response.status == 200) updateUser(data);
+            else alert(response.message)
+        })
+            .catch(error => console.log("Error:", error))
     }
 
-    function checkPassword(json, data) {
-        console.log(json)
-        if (json.website === data.password) {
-            const currentUser = { username: json.username, id: json.id, email: json.email }
-            localStorage.setItem('user', JSON.stringify(currentUser))
-            setUser(currentUser)
-            navigate(`/users/${data.username}`);
-        }
-        else alert('invalid username or password');
+
+    function updateUser(data) {
+        const currentUser = { username: data.username, id:  }
+        localStorage.setItem('user', JSON.stringify(currentUser))
+        setUser(currentUser)
+        navigate(`/users/${data.username}`);
     }
 
     return <>

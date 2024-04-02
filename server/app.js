@@ -4,12 +4,14 @@ import { userRouter } from './Router/userRouter.js'
 import { postRouter } from './Router/postRouter.js';
 import { todoRouter } from './Router/todoRouter.js';
 import { commentRouter } from './Router/commentRouter.js';
+import { authRouter } from './Router/authRouter.js';
 import { logErrors } from './MiddleWare/logError.js';
 
 const app = express();
 app.use(cors())
 app.use(express.json());
 app.use('/users', userRouter);
+app.use('/auth/login',authRouter)
 app.use('/todos', todoRouter);
 app.use('/posts/:postId/comments', commentRouter);
 app.use('/posts', postRouter);
