@@ -25,23 +25,20 @@ export default function Login() {
     }, [])
 
     const loginHandleSubmit = (data) => {
+        let status;
         fetch(`http://localhost:8080/auth/login`, {
             method: "POST",
-            headers:{'Content-Type':'application/json'},
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data)
         }).then((response) => {
-            if (response.status == 200) updateUser(data);
-            else alert(response.message)
-        })
-            .catch(error => console.log("Error:", error))
-    }
-
-
-    function updateUser(data) {
-        const currentUser = { username: data.username, id:  }
-        localStorage.setItem('user', JSON.stringify(currentUser))
-        setUser(currentUser)
-        navigate(`/users/${data.username}`);
+            status = response.status;
+            return response.json();
+        }).then(dataFromServer => {
+            if (status != 200) throw dataFromServer.error;
+            setUser(prev => ({ ...prev, username: data.username, id: dataFromServer.id }));
+            localStorage.setItem('user', JSON.stringify({ username: data.username, id: dataFromServer.id }))
+            navigate(`/users/${data.username}`);
+        }).catch(error => { alert("Error:" + error) })
     }
 
     return <>

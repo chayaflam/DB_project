@@ -16,7 +16,7 @@ export class CommentService {
     }
 
     async addComment(comment) {
-        const queryComment = addQuery("comments","NULL,"+ "?,".repeat((Object.keys(comment).length))+"1");
+        const queryComment = addQuery("comments", "NULL," + "?,".repeat((Object.keys(comment).length)) + "1");
         const result = await executeQuery(queryComment, Object.values(comment));
         return result;
     }

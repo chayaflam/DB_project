@@ -15,8 +15,12 @@ export default function Todos() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        user ? fetch(`${URL}/${user.username}`)
-            .then(response => response.json())
+        user ? fetch(`${URL}/${user.username}`, {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(user.id)
+        })
+            .then(response => { return response.json() })
             .then(json => {
                 saveTodos(json)
             }).catch(error => console.log("Error", error)) : navigate('*')
@@ -135,6 +139,7 @@ export default function Todos() {
     const addTodo = () => {
         let newTodoTitle = prompt('Add new todo:', 'enter todo title')
         if (newTodoTitle && newTodoTitle != "enter todo title") {
+            console.log(user.id)
             const newTodo = { "userId": user.id, "title": newTodoTitle, "completed": 0 }
             console.log(newTodo)
             fetch(`${URL}`, {

@@ -14,12 +14,11 @@ export class UserService {
     async getUserByUsername(username) {
         const queryUser = getByUsernameQuery("users");
         const result = await executeQuery(queryUser, [username]);
-        console.log("result.id  "+result[0].id)
-        return result[0];
+        return result[0] ? result[0] : null;
     }
 
     async addUser(username) {
-        const queryUser = addQuery("users",`NULL,"",?,"","",""`);
+        const queryUser = addQuery("users", `NULL,"",?,"","",""`);
         const result = await executeQuery(queryUser, [username]);
         return result;
     }

@@ -1,14 +1,12 @@
 
 import { executeQuery } from '../db.js';
-import { addPasswordQuery, updatePasswordQuery,getPasswordQuery } from './passwordQuery.js'
+import { addPasswordQuery, updatePasswordQuery, getPasswordQuery } from './passwordQuery.js'
 
 export class UserPasswordService {
 
     async getUserPassword(user) {
-        console.log("user"+user.userId)
         const queryUserPassword = getPasswordQuery();
         const result = await executeQuery(queryUserPassword, Object.values(user));
-        console.log("resulttttttt    "+result[0]['count(*)'])
         return result[0]['count(*)'];
     }
 

@@ -6,7 +6,7 @@ export class TodoController {
     async getTodo(req, res, next) {
         try {
             const todoService = new TodoService();
-            const resultItems = await todoService.getTodo()
+            const resultItems = await todoService.getTodo(req.body)
             return res.status(200).json(resultItems);
         }
         catch (ex) {

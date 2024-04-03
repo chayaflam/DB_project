@@ -1,12 +1,11 @@
-
 import { executeQuery } from './db.js';
 import { getQuery, getByIdQuery, addQuery, deleteQuery, updateQuery } from './queries.js'
 
 export class TodoService {
 
-    async getTodo() {
+    async getTodo(userId) {
         const queryTodo = getQuery("todos");
-        const result = await executeQuery(queryTodo);
+        const result = await executeQuery(queryTodo, [userId]);
         return result;
     }
 
