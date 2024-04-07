@@ -1,5 +1,5 @@
 import { executeQuery } from './db.js';
-import { getQuery, getByIdQuery, addQuery, deleteQuery, updateQuery } from './queries.js'
+import { getQuery, getByParamQuery, addQuery, deleteQuery, updateQuery } from './queries.js'
 
 export class TodoService {
 
@@ -9,15 +9,16 @@ export class TodoService {
         return result;
     }
 
-    async getTodoById(id) {
-        const queryTodo = getByIdQuery("todos");
-        const result = await executeQuery(queryTodo, [id]);
+    async getTodoByuserId(userId) {
+        const queryTodo = getByParamQuery("todos","userId");
+        const result = await executeQuery(queryTodo, [userId]);
         return result;
     }
 
     async addTodo(todo) {
         const queryTodo = addQuery("todos", "NULL," + "?,".repeat((Object.keys(todo).length)) + "1");
         const result = await executeQuery(queryTodo, Object.values(todo));
+        
         return result;
     }
 

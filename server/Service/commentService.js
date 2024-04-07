@@ -1,6 +1,6 @@
 
 import { executeQuery } from './db.js';
-import { getQuery, getByIdQuery, addQuery, deleteQuery, updateQuery } from './queries.js';
+import { getQuery, getByParamQuery, addQuery, deleteQuery, updateQuery } from './queries.js';
 export class CommentService {
 
     async getComment() {
@@ -9,9 +9,9 @@ export class CommentService {
         return result;
     }
 
-    async getCommentById(id) {
-        const queryComment = getByIdQuery("comments");
-        const result = await executeQuery(queryComment, [id]);
+    async getCommentById(postId) {
+        const queryComment = getByParamQuery("comments","postId");
+        const result = await executeQuery(queryComment, [postId]);
         return result;
     }
 

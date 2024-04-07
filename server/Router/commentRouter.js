@@ -6,8 +6,8 @@ const commentController = new CommentController()
 
 
 commentRouter.get("/", commentController.getComment)
-commentRouter.get("/:id", commentController.getCommentById)
-commentRouter.post("/", commentController.addComment)
+commentRouter.get("/:postId", commentController.getCommentById)
+commentRouter.post("/:postId", commentController.addComment)
 commentRouter.delete("/:id", commentController.deleteComment)
 commentRouter.put("/:id", commentController.updateComment)
 

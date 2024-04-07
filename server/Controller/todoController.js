@@ -20,7 +20,7 @@ export class TodoController {
     async getTodoById(req, res, next) {
         try {
             const todoService = new TodoService();
-            const resultItem = await todoService.getTodoById(req.params.id);
+            const resultItem = await todoService.getTodoByuserId(req.params.userId);
             res.status(200).json({ status: 200, data: resultItem });
         }
         catch (ex) {
@@ -34,8 +34,8 @@ export class TodoController {
     async addTodo(req, res) {
         try {
             const todoService = new TodoService();
-            await todoService.addTodo(req.body);
-            res.status(200).json({ status: 200 });
+          const result=  await todoService.addTodo(req.body);
+            res.status(200).json({ status: 200,id:result.insertId });
         }
         catch (ex) {
             const err = {}

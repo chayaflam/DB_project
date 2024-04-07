@@ -34,8 +34,8 @@ export class PostController {
     async addPost(req, res) {
         try {
             const postService = new PostService();
-            await postService.addPost(req.body);
-            res.status(200).json({ status: 200 });
+            const result = await postService.addPost(req.body);
+            res.status(200).json({ status: 200, id: result.insertId });
         }
         catch (ex) {
             const err = {}

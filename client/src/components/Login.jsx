@@ -36,7 +36,7 @@ export default function Login() {
         }).then(dataFromServer => {
             if (status != 200) throw dataFromServer.error;
             setUser(prev => ({ ...prev, username: data.username, id: dataFromServer.id }));
-            localStorage.setItem('user', JSON.stringify({ username: data.username, id: dataFromServer.id }))
+            localStorage.setItem('user', JSON.stringify({ username: data.username, id: dataFromServer.id, email: dataFromServer.email }))
             navigate(`/users/${data.username}`);
         }).catch(error => { alert("Error:" + error) })
     }

@@ -20,7 +20,7 @@ export default function Posts() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        user ? fetch(`${URL}?userId=${user.id}`)
+        user ? fetch(`${URL}`)
             .then(response => response.json())
             .then(json => {
                 if (!posts.length) {
@@ -37,24 +37,41 @@ export default function Posts() {
     }
 
     const addPost = () => {
+        let status;
         let newPostTitle = prompt('Add new post:', 'enter post title')
         if (newPostTitle && newPostTitle != 'enter post title') {
             let newPostBody = prompt(newPostTitle, 'enter post body')
             if (newPostBody && newPostBody != 'enter post body') {
-                const newPost = { "userId": user.id, "id": "" + id, "title": newPostTitle, "body": newPostBody };
+                const newPost = { "userId": user.id, "title": newPostTitle, "body": newPostBody };
                 fetch(`${URL}`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(newPost)
-                }).then(response => response.json())
-                    .then(() => {
-                        setPosts(prev => { return [...prev.data, newPost] })
-                        setPostsToShow(prev => { return [...prev.data, newPost] })
-                    })
-                    .catch(error => console.log("Error", error))
+                }).then(response => {
+                    status = response.status;
+                    return response.json()
+                }).then(dataFromServer => {
+                    if (status != 200) throw dataFromServer.error;
+                    setPosts(prev => ([...prev,
+                    {
+                        "id": dataFromServer.id,
+                        "userId": newPost.id,
+                        "title": newPost.title,
+                        "body": newPost.body
+                    }]));
+
+                    setPostsToShow(prev => ([...prev,
+                    {
+                        "id": dataFromServer.id,
+                        "userId": newPost.id,
+                        "title": newPost.title,
+                        "body": newPost.body
+                    }]))
+                }).catch(error => console.log("Error", error))
             }
         }
     }
+
 
     function deletePost(postId) {
         fetch(`${URL}/${postId}`, {
@@ -69,6 +86,7 @@ export default function Posts() {
     }
 
     function editPost(post, index) {
+        console.log(post.userId)
         let newPostTitle = prompt(`edit post ${post.id}:`, `${post.title}`)
         if (newPostTitle && newPostTitle != post.title) {
             let newPostBody = prompt(newPostTitle, post.body)
@@ -77,7 +95,8 @@ export default function Posts() {
                 newPosts[index].title = newPostTitle
                 newPosts[index].body = newPostBody
                 fetch(`${URL}/${post.id}`, {
-                    method: "PATCH",
+                    method: "PUT",
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ title: newPostTitle, body: newPostBody })
                 }).then((response) => response.json())
                     .then(() => {
@@ -102,25 +121,26 @@ export default function Posts() {
             }
         }
     }
+    console.log(posts)
 
     const searchBy = (event) => {
         event.preventDefault()
-        if (event.target.value.length > 0) switch (showSelectByInput) {
-            case "title": {
-                setPostsToShow(posts.filter(a => a.title.includes(event.target.value)))
-                break;
+        if (event.target.value.length > 0)
+            switch (showSelectByInput) {
+                case "title": {
+                    setPostsToShow(posts.filter(a => a.title.includes(event.target.value)))
+                    break;
+                }
+                case "id": {
+                    setPostsToShow(posts.filter(a => a.id==event.target.value))
+                    break;
+                }
             }
-            case "id": {
-                setPostsToShow(posts.filter(a => a.id.includes(event.target.value)))
-                break;
-            }
-        }
         else setPostsToShow(posts.slice())
     }
 
     function showComments() {
         setDisplayComments(true)
-
     }
 
     function closeComments() {
@@ -129,12 +149,11 @@ export default function Posts() {
     }
 
     function setPostToView(post) {
-        console.log(post)
         setDisplayPost(post)
     }
 
     return <>
-        <button onClick={() => addPost()}>add post{/*<GrAdd />*/} </button><br />
+        <button onClick={() => addPost()}>add post </button><br />
         {!displayPost && showSelectByInput == '' && <select onChange={handleSelectBy}>
             <option value="" disabled selected hidden>select by...</option>
             <option value="id">Id</option>
@@ -142,16 +161,16 @@ export default function Posts() {
         </select>}
         {showSelectByInput != '' && <input autoFocus onChange={searchBy}></input>}
         {showSelectByInput != '' && <button onClick={() => { setShowSelectByInput(''), setPostsToShow(posts.slice()) }}>back</button>}
-        {!displayPost && postsToShow.length > 0 && <h1>Posts:</h1>}
+        {!displayPost && postsToShow && <h1>Posts:</h1>}
         {!displayPost && postsToShow.map((post, i) => {
             return <div key={i}>
                 <h3>id:{post.id}  title:{post.title}</h3>
-                <button onClick={() => deletePost(post.id)}>{/*<VscTrash />*/}</button>
-                <button onClick={() => editPost(post, i)}>{/*<GrEdit />*/}</button>
+                {user.id == post.userId && <><button onClick={() => deletePost(post.id)}>delete</button>
+                    <button onClick={() => editPost(post, i)}>edit</button></>}
                 <button onClick={() => {
                     setPostToView(post)
                     navigate(`./${post.id}`)
-                }}>view {/*<SlArrowRight />*/}</button>
+                }}>view </button>
             </div>
         })}
         {displayPost && <div>

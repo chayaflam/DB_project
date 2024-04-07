@@ -7,7 +7,7 @@ const todoController = new TodoController()
 
 
 todoRouter.get("/", todoController.getTodo)
-// todoRouter.get("/:username", todoController.getTodoById)
+todoRouter.get("/:userId", todoController.getTodoById)
 todoRouter.post("/", todoController.addTodo)
 todoRouter.delete("/:id", todoController.deleteTodo)
 todoRouter.put("/:id", todoController.updateTodo)

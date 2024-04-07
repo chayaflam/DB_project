@@ -21,7 +21,7 @@ export class UserController {
         try {
             const userService = new UserService();
             const resultItem = await userService.getUserByUsername(req.params.username);
-            console.log("resultItem  "+resultItem)
+            console.log("resultItem  " + resultItem)
             res.status(200).json({ status: 200, data: resultItem });
         }
         catch (ex) {
@@ -34,12 +34,11 @@ export class UserController {
 
     async addUser(req, res) {
         try {
-            // if(req.body.password)
             const userService = new UserService();
             const passwordService = new UserPasswordService();
             const newUserId = await userService.addUser(req.body.username);
-            await passwordService.addUserPassword({ id: newUserId.insertId, password: req.body.password });
-            res.status(200).json({ status: 200 });
+            await passwordService.addUserPassword({ userId: newUserId.insertId, password: req.body.password });
+            res.status(200).json({ status: 200, id: newUserId.insertId });
         }
 
         catch (ex) {
@@ -69,6 +68,25 @@ export class UserController {
             const userService = new UserService();
             await userService.updateUser(req.body);
             res.status(200).json({ status: 200 });
+        }
+        catch (ex) {
+            const err = {}
+            err.statusCode = 500;
+            err.message = ex;
+            next(err)
+        }
+    }
+
+    async updatePassword(req, res) {
+        try {
+            const userService = new UserService();
+            const result = await userService.updatePassword(req.body);
+            if (!result) {
+                const err = { statusCode: 405, message: " validation error" }
+               // console.error(err)
+                return res.status(405).json(logErrors(err, req, res, next));
+            }
+           return res.status(200).json({ status: 200 });
         }
         catch (ex) {
             const err = {}

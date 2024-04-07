@@ -11,6 +11,7 @@ export default function Register() {
     const { register, handleSubmit } = useForm()
     const [formToShow, setFormToShow] = useState('initialForm')
     const navigate = useNavigate()
+    const [userId, setUserId] = useState();
 
     const initialForm =
         <>
@@ -30,7 +31,6 @@ export default function Register() {
 
     useEffect(() => {
         if (user) {
-            console.log(user)
             fetch(`${URL}/users?username=${user.username}`, {
                 method: "GET"
             }).then(response => response.json())
@@ -43,52 +43,48 @@ export default function Register() {
     }, [])
 
     const registerHandleSubmit = (data) => {
-        fetch(`${URL}/users/${data.username}`, {
-            method: "GET"
-        }).then(response => response.json())
-            .then(json => doesUserExist(json))
-            .catch(error => console.log("Error:", error))
-            (data.password != data.verifyPassword) ?
-            alert('password verification failed') : <></>
-    }
-
-    function doesUserExist(json) {
-        if (json.length > 0){
-            console.log("json   " + json)
-            alert(`${json[0].username}, you are not a new user, you need to log in`)
-        }
-        else
+        let status;
+        if (data.password != data.verifyPassword) return alert('password verification failed')
+        fetch(`${URL}/auth/register`, {
+            method: "POST",
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        }).then((response) => {
+            status = response.status;
+            return response.json();
+        }).then(dataFromServer => {
+            if (status != 200) throw dataFromServer.error;
+            setUserId( dataFromServer.id)
             setFormToShow('fullDetailsForm')
-    }
-
-    const addUserToDB = (dbUser, currentUser) => {
-        fetch(`${URL}/users`, {
-            method: 'POST',
-            body: JSON.stringify(dbUser)
-        }).then(response => response.json())
-            .then(json => {
-                console.log(json)
-                setUser(currentUser)
-                localStorage.setItem('user', JSON.stringify(currentUser))
-            }).catch((error) => console.error("Error:", error));
+        })
+            .catch(error => alert("Error:", error + "   you are not a new user, you need to log in"))
     }
 
     const addNewUser = (data) => {
-        let id;
-        fetch(`${URL}/nextID`, {
-            method: 'GET'
-        }).then(response => response.json())
+        const dbUser = {
+            "id": userId,
+            "name": data.name,
+            "userName": data.username,
+            "email": data.email,
+            "address": data.address,
+            "phone": data.phone
+        }
+        
+        fetch(`${URL}/users/${data.username}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(dbUser)
+        }).then(response => {
+            return response.json()
+        })
             .then(json => {
-                id = json[0].nextUserId
-                const dbUser = {
-                    "id": '' + id, "name": data.name, "username": data.username,
-                    "email": data.email, "address": data.address, "phone": data.phone
-                }
-                const currentUser = { "username": dbUser.username, "id": dbUser.id, "email": dbUser.email }
-                addUserToDB(dbUser, currentUser)
-                navigate(`/users/${dbUser.username}`);
+                const currentUser = { "username": dbUser.userName, "id": dbUser.id, "email": dbUser.email }
+                setUser(currentUser)
+                localStorage.setItem('user', JSON.stringify(currentUser))
+                navigate(`/users/${dbUser.userName}`);
             }).catch((error) => console.error("Error:", error));
     }
+
 
     return <>
         <div className="register">

@@ -1,14 +1,15 @@
 
 function getQuery(table) {
-    return `SELECT * FROM db_project.${table}`;
+    return table == 'users' ? `SELECT * FROM db_project.${table}   `
+        : `SELECT * FROM db_project.${table} where  isActive!=0`;
 }
 
 function getByUsernameQuery(table) {
-    return `SELECT * FROM db_project.${table} where username = ? `;
+    return `SELECT * FROM db_project.${table} where userName = ? `;
 }
 
-function getByIdQuery(table) {
-    return `SELECT * FROM db_project.${table} where id = ? `;
+function getByParamQuery(table, param) {
+    return `SELECT * FROM db_project.${table} where ${param} = ? && isActive!=0`;
 }
 
 
@@ -28,5 +29,5 @@ function updateQuery(table, objectKeys) {
 }
 
 export {
-    getQuery, getByUsernameQuery, getByIdQuery, addQuery, deleteQuery, updateQuery
+    getQuery, getByUsernameQuery, getByParamQuery, addQuery, deleteQuery, updateQuery
 }

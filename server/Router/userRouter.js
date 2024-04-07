@@ -8,9 +8,9 @@ const userController = new UserController()
 userRouter.get("/", userController.getUser)
 userRouter.get("/:username", userController.getUserByUsername)
 userRouter.post("/", userController.addUser)
-userRouter.post("/:username")
 userRouter.delete("/:id", userController.deleteUser)
-userRouter.put("/", userController.updateUser)
+userRouter.put("/:username", userController.updateUser)
+userRouter.put("/", userController.updatePassword)
 
 
 export{

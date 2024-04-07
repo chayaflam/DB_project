@@ -20,7 +20,7 @@ export class CommentController {
     async getCommentById(req, res, next) {
         try {
             const commentService = new CommentService();
-            const resultItem = await commentService.getCommentById(req.params.id);
+            const resultItem = await commentService.getCommentById(req.params.postId);
             res.status(200).json({ status: 200, data: resultItem });
         }
         catch (ex) {
@@ -34,8 +34,8 @@ export class CommentController {
     async addComment(req, res) {
         try {
             const commentService = new CommentService();
-            await commentService.addComment(req.body);
-            res.status(200).json({ status: 200 });
+            const result = await commentService.addComment(req.body);
+            res.status(200).json({ status: 200, id: result.insertId });
         }
         catch (ex) {
             const err = {}

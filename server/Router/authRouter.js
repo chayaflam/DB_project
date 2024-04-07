@@ -6,8 +6,8 @@ const authController = new AuthController()
 
 
 
-authRouter.post("/", authController.getAuth)
-
+authRouter.post("/login", authController.getAuthLogin)
+authRouter.post("/register", authController.getAuthRegister)
 
 
 export {

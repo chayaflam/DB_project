@@ -1,6 +1,6 @@
 
 import { executeQuery } from './db.js';
-import { getQuery, getByIdQuery, addQuery, deleteQuery, updateQuery } from './queries.js';
+import { getQuery, getByParamQuery, addQuery, deleteQuery, updateQuery } from './queries.js';
 export class PostService {
 
     async getPost() {
@@ -10,7 +10,7 @@ export class PostService {
     }
 
     async getPostById(id) {
-        const queryPost = getByIdQuery("posts");
+        const queryPost = getByParamQuery("posts","id");
         const result = await executeQuery(queryPost, [id]);
         return result;
     }

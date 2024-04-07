@@ -15,14 +15,12 @@ export default function Todos() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        user ? fetch(`${URL}/${user.username}`, {
-            method: 'GET',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(user.id)
+        user ? fetch(`${URL}/${user.id}`, {
+            method: 'GET'
         })
             .then(response => { return response.json() })
             .then(json => {
-                saveTodos(json)
+                saveTodos(json.data)
             }).catch(error => console.log("Error", error)) : navigate('*')
     }, [])
 
@@ -38,6 +36,7 @@ export default function Todos() {
         newTodos[i].completed = !todo.completed
         fetch(`${URL}/${todo.id}`, {
             method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ completed: newTodos[i].completed })
         }).then((response) => response.json())
             .then(() => {
@@ -108,15 +107,22 @@ export default function Todos() {
     }
 
     function deleteTodo(todoId) {
+        let status;
         fetch(`${URL}/${todoId}`, {
             method: "DELETE",
             body: JSON.stringify(todoId)
-        }).then((response) => response.json())
-            .then(() => {
+        }).then((response) => {
+            status = response.status;
+            return response.json()
+        })
+            .then((dataFromServer) => {
+                if (status != 200) throw dataFromServer.error;
                 setTodos(todos.filter(t => t.id != todoId))
                 setTodosToShow(todosToShow.filter(t => t.id != todoId))
+
             })
             .catch((error) => console.error("Error:", error));
+
     }
 
     function renameTodo(index, todo) {
@@ -125,7 +131,8 @@ export default function Todos() {
             let newTodos = todosToShow.slice()
             newTodos[index].title = newTitle;
             fetch(`${URL}/${todo.id}`, {
-                method: "PATCH",
+                method: "PUT",
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ title: newTodos[index].title })
             }).then((response) => response.json())
                 .then(() => {
@@ -137,30 +144,49 @@ export default function Todos() {
     }
 
     const addTodo = () => {
+        let status;
         let newTodoTitle = prompt('Add new todo:', 'enter todo title')
         if (newTodoTitle && newTodoTitle != "enter todo title") {
             console.log(user.id)
             const newTodo = { "userId": user.id, "title": newTodoTitle, "completed": 0 }
-            console.log(newTodo)
             fetch(`${URL}`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(newTodo)
-            }).then(response => response.json())
-                .then(() => {
-                    setTodos(prev => { return [...prev.data, newTodo] })
-                    if (selectBy == '') setTodosToShow(prev => { return [...prev.data, newTodo] })
+
+            }).then(response => {
+                status = response.status;
+                return response.json()
+            })
+                .then(dataFromServer => {
+                    if (status != 200) throw dataFromServer.error;
+                    console.log(dataFromServer.id)
+                    setTodos(prev => ([...prev,
+                    {
+                        "id": dataFromServer.id,
+                        "userId": newTodo.id,
+                        "title": newTodo.title,
+                        "completed": newTodo.completed
+                    }]));
+                    if (selectBy == '')
+                        setTodosToShow(prev => ([...prev,
+                        {
+                            "id": dataFromServer.id,
+                            "userId": newTodo.id,
+                            "title": newTodo.title,
+                            "completed": newTodo.completed
+                        }]))
                 })
                 .catch(error => console.log("Error", error))
         }
     }
-
-
+    console.log(todosToShow);
     return <>
+
         {todos.length > 0 && <h1>Todos</h1>}
         <div style={{ marginTop: "70px" }}></div>
         {todos.length == 0 && <h4>you have no todos. click to add a todo</h4>}
-        <button id="addTodo" onClick={() => addTodo()}> add todo {/*<GrAdd />*/}</button><br />
+        <button id="addTodo" onClick={() => addTodo()}> add todo</button><br />
         {todosToShow.length > 1 && <select name="orderBy" onChange={handleOrderBy}>
             <option value="" disabled selected hidden>order todos by...</option>
             <option value="by_id">by id</option>
@@ -187,21 +213,23 @@ export default function Todos() {
                 </tr>
             </thead>
             <tbody>
-                {todosToShow.length > 0 ? todosToShow.map((todo, i) =>
+                {todosToShow && todosToShow.map((todo, i) =>
                     <tr key={i}>
                         <td key={todo.id}>{todo.id}</td>
                         <td>{todo.title}</td>
                         <td key={todo.completed}><input type="checkbox" onChange={() => changeTodoState(todo, i)} checked={todo.completed} /></td>
                         <td><button onClick={() => renameTodo(i, todo)}>rename{/*<GrEdit/>*/}</button></td>
                         <td><button onClick={() => deleteTodo(todo.id)}>delete{/*<VscTrash />*/}</button></td>
-                    </tr>) :
-                    <tr>
-                        <td key={todosToShow[0].id}>{todosToShow[0].id}</td>
-                        <td key={todosToShow[0].title}>{todosToShow[0].title} </td>
-                        <td key={todosToShow[0].completed}><input type="checkbox" onChange={() => changeTodoState(todosToShow[0], 0)} checked={todosToShow[0].completed} /></td>
-                        <td><button onClick={() => renameTodo(i, todo)}>rename{/*<GrEdit/>*/}</button></td>
-                        <td><button onClick={() => deleteTodo(todosToShow[0].id)}>delete{/*<VscTrash />*/}</button></td>
-                    </tr>}
+                    </tr>)
+                    // :
+                    // <tr>
+                    //     <td key={todosToShow[0].id}>{todosToShow[0].id}</td>
+                    //     <td key={todosToShow[0].title}>{todosToShow[0].title} </td>
+                    //     <td key={todosToShow[0].completed}><input type="checkbox" onChange={() => changeTodoState(todosToShow[0], 0)} checked={todosToShow[0].completed} /></td>
+                    //     <td><button onClick={() => renameTodo(i, todosToShow[0])}>rename{/*<GrEdit/>*/}</button></td>
+                    //     <td><button onClick={() => deleteTodo(todosToShow[0].id)}>delete{/*<VscTrash />*/}</button></td>
+                    // </tr>
+                }
             </tbody>
         </table >}
     </>

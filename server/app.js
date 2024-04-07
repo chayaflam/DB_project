@@ -11,10 +11,10 @@ const app = express();
 app.use(cors())
 app.use(express.json());
 app.use('/users', userRouter);
-app.use('/auth/login',authRouter)
+app.use('/auth', authRouter)
 app.use('/todos', todoRouter);
-app.use('/posts/:postId/comments', commentRouter);
 app.use('/posts', postRouter);
+app.use('/comments', commentRouter);
 app.use(logErrors);
 
 
