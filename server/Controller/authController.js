@@ -31,7 +31,6 @@ export class AuthController {
         try {
             const authService = new UserService();
             const passwordService = new UserPasswordService();
-
             const resultItems = await authService.getUserByUsername(req.body.username);
             if (!resultItems) {
                 const resultAddUser = await authService.addUser(req.body.username);
@@ -39,7 +38,7 @@ export class AuthController {
                 if (resultAddPassword)
                     return res.status(200).json({ status: 200 ,id:resultAddUser.insertId});
             }
-            console.log("err");
+            console.error("err");
             const err = { statusCode: 409, message: "Registration failed" }
             return res.status(409).json(logErrors(err, req, res, next))
         }

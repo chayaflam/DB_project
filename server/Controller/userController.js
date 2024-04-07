@@ -39,6 +39,7 @@ export class UserController {
             const newUserId = await userService.addUser(req.body.username);
             await passwordService.addUserPassword({ userId: newUserId.insertId, password: req.body.password });
             res.status(200).json({ status: 200, id: newUserId.insertId });
+            newUserId? console.log("add user"):console.error("can't insert user")
         }
 
         catch (ex) {
