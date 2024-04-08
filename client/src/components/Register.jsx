@@ -7,11 +7,12 @@ import { UserContext } from "../main";
 const URL = "http://localhost:8080"
 
 export default function Register() {
+
     const [user, setUser] = useContext(UserContext)
-    const { register, handleSubmit } = useForm()
     const [formToShow, setFormToShow] = useState('initialForm')
-    const navigate = useNavigate()
     const [userId, setUserId] = useState();
+    const { register, handleSubmit } = useForm()
+    const navigate = useNavigate();
 
     const initialForm =
         <>
@@ -31,8 +32,8 @@ export default function Register() {
 
     useEffect(() => {
         if (user) {
-            fetch(`${URL}/users?username=${user.username}`, {
-                method: "GET"
+            fetch(`${URL}/users/${user.username}`, {
+                method: 'GET'
             }).then(response => response.json())
                 .then(json => {
                     if (json)
@@ -46,7 +47,7 @@ export default function Register() {
         let status;
         if (data.password != data.verifyPassword) return alert('password verification failed')
         fetch(`${URL}/auth/register`, {
-            method: "POST",
+            method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data)
         }).then((response) => {
@@ -54,7 +55,7 @@ export default function Register() {
             return response.json();
         }).then(dataFromServer => {
             if (status != 200) throw dataFromServer.error;
-            setUserId( dataFromServer.id)
+            setUserId(dataFromServer.id)
             setFormToShow('fullDetailsForm')
         })
             .catch(error => alert("Error:", error + "   you are not a new user, you need to log in"))
@@ -69,20 +70,18 @@ export default function Register() {
             "address": data.address,
             "phone": data.phone
         }
-        
         fetch(`${URL}/users/${data.username}`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(dbUser)
         }).then(response => {
-            return response.json()
-        })
-            .then(json => {
-                const currentUser = { "username": dbUser.userName, "id": dbUser.id, "email": dbUser.email }
-                setUser(currentUser)
-                localStorage.setItem('user', JSON.stringify(currentUser))
-                navigate(`/users/${dbUser.userName}`);
-            }).catch((error) => console.error("Error:", error));
+            return response.json();
+        }).then(() => {
+            const currentUser = { "username": dbUser.userName, "id": dbUser.id, "email": dbUser.email }
+            setUser(currentUser)
+            localStorage.setItem('user', JSON.stringify(currentUser))
+            navigate(`/users/${dbUser.userName}`);
+        }).catch((error) => console.error("Error:", error));
     }
 
 
@@ -95,7 +94,6 @@ export default function Register() {
                 {formToShow == 'fullDetailsForm' && fullDetailsForm}
                 <a href="/login">already have an account ? login here</a>
             </form>
-
         </div>
     </>
 }

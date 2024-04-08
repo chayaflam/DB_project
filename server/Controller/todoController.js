@@ -34,8 +34,8 @@ export class TodoController {
     async addTodo(req, res) {
         try {
             const todoService = new TodoService();
-          const result=  await todoService.addTodo(req.body);
-            res.status(200).json({ status: 200,id:result.insertId });
+            const result = await todoService.addTodo(req.body);
+            res.status(200).json({ status: 200, id: result.insertId });
         }
         catch (ex) {
             const err = {}

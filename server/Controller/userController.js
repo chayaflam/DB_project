@@ -21,7 +21,6 @@ export class UserController {
         try {
             const userService = new UserService();
             const resultItem = await userService.getUserByUsername(req.params.username);
-            console.log("resultItem  " + resultItem)
             res.status(200).json({ status: 200, data: resultItem });
         }
         catch (ex) {
@@ -39,7 +38,7 @@ export class UserController {
             const newUserId = await userService.addUser(req.body.username);
             await passwordService.addUserPassword({ userId: newUserId.insertId, password: req.body.password });
             res.status(200).json({ status: 200, id: newUserId.insertId });
-            newUserId? console.log("add user"):console.error("can't insert user")
+            newUserId ? console.log("add user") : console.error("can't insert user")
         }
 
         catch (ex) {
@@ -84,10 +83,10 @@ export class UserController {
             const result = await userService.updatePassword(req.body);
             if (!result) {
                 const err = { statusCode: 405, message: " validation error" }
-               // console.error(err)
+                // console.error(err)
                 return res.status(405).json(logErrors(err, req, res, next));
             }
-           return res.status(200).json({ status: 200 });
+            return res.status(200).json({ status: 200 });
         }
         catch (ex) {
             const err = {}

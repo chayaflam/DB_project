@@ -8,8 +8,8 @@ import Home from './components/Home'
 import Info from './components/Info';
 import Todos from './components/Todos';
 import Posts from './components/Posts';
-// import NoPage from './components/NoPage';
 import Comments from './components/Comments';
+// import NoPage from './components/NoPage';
 
 
 export default function App() {

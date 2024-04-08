@@ -13,16 +13,15 @@ export default function Comments() {
 
 
     useEffect(() => {
-        console.log(post.id)
         if (!comments.length) {
             fetch(`${URL}/${post.id}`, {
                 method: 'GET'
-            }).then(response => response.json())
-                .then(json => (comments != json) ? setComments(json.data) : console.log(json.data))
+            }).then(response => {
+                return response.json()
+            }).then(json => (comments != json) ? setComments(json.data) : console.log(json.data))
         }
         else setComments([])
     }, [])
-
 
     function editComment(comment, index) {
         let newCommentName = prompt(`edit comment ${comment.id} new name:`, comment.name)
@@ -33,11 +32,12 @@ export default function Comments() {
                 newComments[index].name = newCommentName
                 newComments[index].body = newCommentBody
                 fetch(`${URL}/${comment.id}`, {
-                    method: "PUT",
+                    method: 'PUT',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ name: newCommentName, body: newCommentBody })
-                }).then((response) => response.json())
-                    .then(() => setComments(newComments))
+                }).then((response) => {
+                    return response.json()
+                }).then(() => setComments(newComments))
                     .catch((error) => console.error("Error:", error));
             }
         }
@@ -45,8 +45,7 @@ export default function Comments() {
 
     function deleteComment(commentId) {
         fetch(`${URL}/${commentId}`, {
-            method: "DELETE",
-            headers: { 'Content-Type': 'application/json' },
+            method: 'DELETE',
             body: JSON.stringify(commentId)
         }).then((response) => response.json())
             .then(() => setComments(comments.filter(c => c.id != commentId)))
@@ -82,7 +81,7 @@ export default function Comments() {
     }
 
     return <>
-        {comments.length > 0 && <h2>comments</h2>}
+        {comments.length > 0 && <h2>comments</h2>}<br />
         <button onClick={() => addComment()}>add comment <GrAdd /></button>
         {comments.length > 0 && comments.map((comment, i) => {
             return <div key={i}>

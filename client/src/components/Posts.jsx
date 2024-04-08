@@ -1,8 +1,8 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Outlet, Link, useNavigate } from 'react-router-dom';
-// import { VscTrash } from "react-icons/vsc";
-// import { GrEdit, GrAdd } from "react-icons/gr";
-// import { SlArrowRight } from "react-icons/sl";
+import { VscTrash } from "react-icons/vsc";
+import { GrEdit, GrAdd } from "react-icons/gr";
+import { SlArrowRight } from "react-icons/sl";
 import { UserContext } from "../main";
 
 const URL = "http://localhost:8080/posts"
@@ -59,7 +59,6 @@ export default function Posts() {
                         "title": newPost.title,
                         "body": newPost.body
                     }]));
-
                     setPostsToShow(prev => ([...prev,
                     {
                         "id": dataFromServer.id,
@@ -72,17 +71,16 @@ export default function Posts() {
         }
     }
 
-
     function deletePost(postId) {
         fetch(`${URL}/${postId}`, {
-            method: "DELETE",
+            method: 'DELETE',
             body: JSON.stringify(postId)
-        }).then((response) => response.json())
-            .then(() => {
-                setPosts(posts.filter(p => p.id != postId))
-                setPostsToShow(postsToShow.filter(p => p.id != postId))
-            })
-            .catch((error) => console.error("Error:", error));
+        }).then((response) => {
+            return response.json()
+        }).then(() => {
+            setPosts(posts.filter(p => p.id != postId))
+            setPostsToShow(postsToShow.filter(p => p.id != postId))
+        }).catch((error) => console.error("Error:", error));
     }
 
     function editPost(post, index) {
@@ -95,15 +93,15 @@ export default function Posts() {
                 newPosts[index].title = newPostTitle
                 newPosts[index].body = newPostBody
                 fetch(`${URL}/${post.id}`, {
-                    method: "PUT",
+                    method: 'PUT',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ title: newPostTitle, body: newPostBody })
-                }).then((response) => response.json())
-                    .then(() => {
-                        setPosts(posts.filter(p => p == post ? newPosts[index] : p))
-                        if (showSelectByInput == '') setPostsToShow(postsToShow.filter(p => p == post ? newPosts[index] : p))
-                    })
-                    .catch((error) => console.error("Error:", error));
+                }).then((response) => {
+                    return response.json()
+                }).then(() => {
+                    setPosts(posts.filter(p => p == post ? newPosts[index] : p))
+                    if (showSelectByInput == '') setPostsToShow(postsToShow.filter(p => p == post ? newPosts[index] : p))
+                }).catch((error) => console.error("Error:", error));
             }
         }
     }
@@ -121,7 +119,6 @@ export default function Posts() {
             }
         }
     }
-    console.log(posts)
 
     const searchBy = (event) => {
         event.preventDefault()
@@ -132,7 +129,7 @@ export default function Posts() {
                     break;
                 }
                 case "id": {
-                    setPostsToShow(posts.filter(a => a.id==event.target.value))
+                    setPostsToShow(posts.filter(a => a.id == event.target.value))
                     break;
                 }
             }
@@ -178,7 +175,8 @@ export default function Posts() {
             <h2>  post Title: {displayPost.title}</h2><br />
             <h2>post Body: {displayPost.body}</h2>
         </div>}
-        {displayPost && !displayComments && <Link to={`./comments`} state={displayPost}><button onClick={() => showComments()}>comments</button></Link>}
+        {displayPost && !displayComments && <Link to={`./comments`} state={displayPost}>
+            <button onClick={() => showComments()}>comments</button></Link>}
         {displayComments && <Outlet />}
         {displayComments && <button onClick={() => closeComments()}>close comments</button>}
         {displayPost && <button onClick={() => closePost()}>close post</button>}

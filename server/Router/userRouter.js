@@ -13,7 +13,7 @@ userRouter.put("/:username", userController.updateUser)
 userRouter.put("/", userController.updatePassword)
 
 
-export{
+export {
     userRouter
 }
 

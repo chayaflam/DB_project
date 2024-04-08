@@ -13,8 +13,8 @@ export default function Login() {
 
     useEffect(() => {
         if (user) {
-            fetch(`${URL}/users?username=${user.username}`, {
-                method: "GET"
+            fetch(`${URL}/users/${user.username}`, {
+                method: 'GET'
             }).then(response => response.json())
                 .then(json => {
                     if (json) navigate(`/users/${user.username}`)
@@ -26,8 +26,8 @@ export default function Login() {
 
     const loginHandleSubmit = (data) => {
         let status;
-        fetch(`http://localhost:8080/auth/login`, {
-            method: "POST",
+        fetch(`${URL}/auth/login`, {
+            method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data)
         }).then((response) => {

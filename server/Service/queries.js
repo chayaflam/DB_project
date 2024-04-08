@@ -1,15 +1,15 @@
 
 function getQuery(table) {
     return table == 'users' ? `SELECT * FROM db_project.${table}   `
-        : `SELECT * FROM db_project.${table} where  isActive!=0`;
+        : `SELECT * FROM db_project.${table} WHERE  isActive != 0`;
 }
 
 function getByUsernameQuery(table) {
-    return `SELECT * FROM db_project.${table} where userName = ? `;
+    return `SELECT * FROM db_project.${table} WHERE userName = ? `;
 }
 
 function getByParamQuery(table, param) {
-    return `SELECT * FROM db_project.${table} where ${param} = ? && isActive!=0`;
+    return `SELECT * FROM db_project.${table} WHERE ${param} = ? && isActive != 0`;
 }
 
 

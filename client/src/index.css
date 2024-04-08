@@ -4,7 +4,7 @@
   font-weight: 400;
 
   color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
+  color: rgba(13, 12, 12, 0.87);
   background-color: #242424;
 
   font-synthesis: none;
@@ -13,55 +13,232 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+header {
+  font-size: 30px;
+  top: 20px;
+  margin-top: 30px;
+  padding: 20px 10px !important;
+}
+
+#img_grid_container{
+  display: grid;
+  grid-template-columns: auto auto auto;
+  justify-content: space-evenly;
+}
+
 a {
   font-weight: 500;
-  color: #646cff;
+  color: #ffffff;
   text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
 }
 
 body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
+  width: 100%;
+  justify-content: center;
 }
 
 h1 {
   font-size: 3.2em;
   line-height: 1.1;
+  display: block;
+  justify-self: center;
+}
+
+th {
+  color: rgb(40, 136, 205);
+}
+
+table {
+  margin-left: 200px;
+}
+
+.navHome {
+  position: sticky;
+  display: flex;
+  justify-content: space-around;
+  background-color: #282A35;
+  color: #fdf9f9;
+  padding: 0;
+  letter-spacing: 1px;
+  font-family: 'Source Sans Pro Topnav', sans-serif;
+  left: 0px;
+  top: 0px;
+  z-index: 2;
+  width: 100%;
+  height: 105px;
+  white-space: nowrap;
+  bottom: 100px;
+}
+
+.navHome a {
+  display: flex;
+  width: auto;
+  height: auto;
+  justify-self: center;
+  margin-left: 20px !important;
+  margin-right: 20px !important;
+  padding: 20px 10px !important;
+  font-size: 15px !important;
+  text-decoration: none;
+  line-height: 1.5;
+  color: #f9f9f9;
+  float: left;
+}
+
+select {
+  padding: 2px;
+  border-radius: 8px;
+  padding: 0.6em 1.2em;
+  margin-right: 30px;
+  margin-bottom: 30px;
 }
 
 button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
   font-size: 1em;
   font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
   cursor: pointer;
-  transition: border-color 0.25s;
+  border: none;
+  display: inline-block;
+  vertical-align: middle;
+  text-align: center;
+  white-space: nowrap;
 }
-button:hover {
-  border-color: #646cff;
+
+h2 {
+  display: inline;
 }
+
+form {
+  margin-top: 200px;
+  margin-left: 35% ;
+  background-color: #141313;
+  height: 100%;
+  width: 550px;
+  padding: 10px;
+}
+
+form input {
+  left: 10px;
+  padding: 10px;
+  margin: 10px 0px;
+}
+
+form label {
+  padding-left: 0px;
+  margin-left: 0px;
+  color: white;
+}
+
+form a {
+  padding: 10px;
+}
+
+form button {
+  margin: 20px;
+}
+
+* {
+  box-sizing: border-box
+}
+
+/* Container needed to position the overlay. Adjust the width as needed */
+.container {
+  position: relative;
+  width: 100%;
+  max-width: 300px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+/* Make the image to responsive */
+.image {
+  display: block;
+  width: 300px;
+  height: auto;
+}
+
+/* The overlay effect - lays on top of the container and over the image */
+.overlay {
+  position: absolute;
+  justify-content: space-between;
+  padding: 2px;
+  bottom: 0;
+  background: rgb(0, 0, 0);
+  background: rgba(0, 0, 0, 0.5);
+  /* Black see-through */
+  color: #f1f1f1;
+  width: 100%;
+  transition: .5s ease;
+  opacity: 0;
+  color: white;
+  font-size: 20px;
+  padding: 2px;
+  text-align: center;
+}
+
+.img_edit {
+  margin: 2px;
+  padding: auto;
+}
+
+/* When you mouse over the container, fade in the overlay title */
+.container:hover .overlay {
+  opacity: 1;
+
+}
+
+/* #img_grid_container {
+  display: grid;
+  grid-template-columns: auto auto auto;
+  justify-content: space-around;
+} */
+
+#addTodo {
+  float: right;
+  width: 100px;
+  height: 50px;
+  margin-right: 300px;
+}
+
+
+
+.navHome a:hover {
+  border-color: #0c0c0c;
+}
+
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
+#logout {
+  float: right;
+  right: 0px;
+  background-color: #282A35;
+  font-family: 'Source Sans Pro Topnav', sans-serif;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+form h3 {
+  font-size: 30px;
+  color: #f9f9f9;
+  padding-top: 30px;
+  margin-left: 20px;
+}
+
+
 @media (prefers-color-scheme: light) {
   :root {
-    color: #213547;
+    color: #161617;
     background-color: #ffffff;
   }
+
   a:hover {
-    color: #747bff;
+    background-color: #0c0c0c;
   }
+
   button {
     background-color: #f9f9f9;
   }

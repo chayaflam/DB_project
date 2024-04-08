@@ -2,6 +2,8 @@ import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import { UserContext } from "../main";
 
+const URL = `http://localhost:8080`;
+
 export default function Info() {
 
     const [userInfo, setUserInfo] = useState({
@@ -13,7 +15,7 @@ export default function Info() {
     const navigate = useNavigate()
 
     useEffect(() => {
-        userInfo.name == '' ? fetch(`http://localhost:8080/users/${user.username}`)
+        userInfo.username == '' ? fetch(`${URL}/users/${user.username}`)
             .then(response => response.json())
             .then(json => {
                 setUserInfo({
@@ -28,7 +30,7 @@ export default function Info() {
         <>
             {user && <h1>Hi {userInfo.name}, here is your information:</h1>}
             {details.map((detail, index) =>
-                <span key={index}>{`${detail}: ${userInfo[detail]} `}</span>)}
+                <span key={index}><h3>{`${detail}:`}</h3>{`${userInfo[detail]} `}</span>)}
         </>
     )
 }
