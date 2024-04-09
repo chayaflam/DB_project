@@ -39,7 +39,7 @@ export default function Register() {
                     if (json)
                         navigate(`/users/${user.username}`)
                 })
-                .catch(error => console.log("Error:", error))
+                .catch(error => alert("Error:", error))
         }
     }, [])
 
@@ -81,7 +81,7 @@ export default function Register() {
             setUser(currentUser)
             localStorage.setItem('user', JSON.stringify(currentUser))
             navigate(`/users/${dbUser.userName}`);
-        }).catch((error) => console.error("Error:", error));
+        }).catch((error) => alert("Error:", error));
     }
 
 

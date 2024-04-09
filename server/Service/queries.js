@@ -1,7 +1,13 @@
 
 function getQuery(table) {
-    return table == 'users' ? `SELECT * FROM db_project.${table}   `
-        : `SELECT * FROM db_project.${table} WHERE  isActive != 0`;
+    switch (table) {
+        case 'users':
+            return `SELECT * FROM db_project.${table}`;
+        case 'posts':
+            return `SELECT  * FROM db_project.${table} WHERE  isActive != 0 LIMIT ? `
+        default:
+            return `SELECT * FROM db_project.${table} WHERE  isActive != 0`
+    }
 }
 
 function getByUsernameQuery(table) {
@@ -9,9 +15,10 @@ function getByUsernameQuery(table) {
 }
 
 function getByParamQuery(table, param) {
-    return `SELECT * FROM db_project.${table} WHERE ${param} = ? && isActive != 0`;
+    return table == 'todos' ?
+        `SELECT * FROM db_project.${table} WHERE userId = ? && isActive != 0 ORDER BY ${param} ` :
+        `SELECT * FROM db_project.${table} WHERE ${param} = ? && isActive != 0 `
 }
-
 
 function addQuery(table, values) {
     return `INSERT INTO db_project.${table} VALUES(${values})`

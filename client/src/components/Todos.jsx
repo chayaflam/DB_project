@@ -12,20 +12,21 @@ export default function Todos() {
     const [todos, setTodos] = useState([]);
     const [todosToShow, setTodosToShow] = useState([]);
     const [selectBy, setSelectBy] = useState('')
+    const [sortBy, setSortBy] = useState('id')
     const navigate = useNavigate();
 
     useEffect(() => {
-        user ? fetch(`${URL}/${user.id}`, {
+        user ? fetch(`${URL}?userId=${user.id}&sort=${sortBy}`, {
             method: 'GET'
         }).then(response => {
             return response.json()
         }).then(json => {
             saveTodos(json.data)
-        }).catch(error => console.log("Error", error)) : navigate('*')
-    }, [])
+        }).catch(error => alert("Error", error)) : navigate('*')
+    }, [sortBy])
 
     function saveTodos(data) {
-        if (todos.length === 0) {
+        if (data.length != 0) {
             setTodos(data)
             setTodosToShow(data)
         }
@@ -44,30 +45,12 @@ export default function Todos() {
             if (selectBy != 'completion') setTodosToShow(newTodos)
             else (setTodosToShow(newTodos.filter(t => t != todo)))
             setTodos(todos.filter(t => t == todo ? newTodos[i] : t))
-        }).catch((error) => console.error("Error:", error));
+        }).catch((error) => alert("Error:", error));
     }
 
     const handleOrderBy = (event) => {
         event.preventDefault()
-        console.log(todosToShow)
-        let orderByTodos = todosToShow.slice();
-        switch (event.target.value) {
-            case 'by_alphabet': {
-                orderByTodos.sort((a, b) => { return a.title < b.title ? -1 : 1 })
-                break;
-            } case 'by_completion': {
-                orderByTodos.sort(a => { return a.completed ? -1 : 1 })
-                break;
-            } case 'random': {
-                orderByTodos.sort(() => (Math.random() > 0.5) ? 1 : -1)
-                break;
-            }
-            case 'by_id': {
-            }
-            default:
-                orderByTodos.sort((a, b) => { return a.id - b.id })
-        }
-        setTodosToShow(orderByTodos)
+        setSortBy(event.target.value)
     }
 
     const handleSelectBy = (event) => {
@@ -118,7 +101,7 @@ export default function Todos() {
             if (status != 200) throw dataFromServer.error;
             setTodos(todos.filter(t => t.id != todoId))
             setTodosToShow(todosToShow.filter(t => t.id != todoId))
-        }).catch((error) => console.error("Error:", error));
+        }).catch((error) => alert("Error:", error));
     }
 
     function renameTodo(index, todo) {
@@ -135,7 +118,7 @@ export default function Todos() {
             }).then(() => {
                 if (selectBy != 'title') setTodosToShow(newTodos)
                 setTodos(todos.filter(t => t = todo ? newTodos[index] : t))
-            }).catch((error) => console.error("Error:", error));
+            }).catch((error) => alert("Error:", error));
         }
     }
 
@@ -168,7 +151,7 @@ export default function Todos() {
                         "title": newTodo.title,
                         "completed": newTodo.completed
                     }]))
-            }).catch(error => console.log("Error", error))
+            }).catch(error => alert("Error", error))
         }
     }
 
@@ -180,10 +163,10 @@ export default function Todos() {
         <button id="addTodo" onClick={() => addTodo()}> add todo</button><br />
         {todosToShow.length > 1 && <select name="orderBy" onChange={handleOrderBy}>
             <option value="" disabled selected hidden>order todos by...</option>
-            <option value="by_id">by id</option>
-            <option value="by_alphabet">by alphabet</option>
-            <option value="by_completion">by completion</option>
-            <option value="random">random order</option>
+            <option value="id">by id</option>
+            <option value="title">by alphabet</option>
+            <option value="completed">by completion</option>
+            <option value="rand()">random order</option>
         </select>}
         {todosToShow.length > 1 && selectBy == '' && <select onChange={handleSelectBy}>
             <option value="" disabled selected hidden>select by...</option>

@@ -19,7 +19,7 @@ export default function Login() {
                 .then(json => {
                     if (json) navigate(`/users/${user.username}`)
                 })
-                .catch(error => console.log("Error:", error))
+                .catch(error => alert("Error:", error))
         }
         else navigate('/login');
     }, [])

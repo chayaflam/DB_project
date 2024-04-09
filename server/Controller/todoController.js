@@ -20,7 +20,7 @@ export class TodoController {
     async getTodoById(req, res, next) {
         try {
             const todoService = new TodoService();
-            const resultItem = await todoService.getTodoByuserId(req.params.userId);
+            const resultItem = await todoService.getTodoByuserId(req.query);
             res.status(200).json({ status: 200, data: resultItem });
         }
         catch (ex) {

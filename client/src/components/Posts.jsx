@@ -15,20 +15,23 @@ export default function Posts() {
     const [postsToShow, setPostsToShow] = useState([])
     const [displayPost, setDisplayPost] = useState(null)
     const [displayComments, setDisplayComments] = useState(false)
-    const [showSelectByInput, setShowSelectByInput] = useState('')
+    const [selectByInput, setSelectByInput] = useState('')
+    const [displayMorePosts, setDisplayMorePosts] = useState(5);
 
     const navigate = useNavigate();
 
     useEffect(() => {
-        user ? fetch(`${URL}`)
-            .then(response => response.json())
+        user ? fetch(`${URL}/${displayMorePosts}`
+        ).then(response => response.json())
             .then(json => {
-                if (!posts.length) {
+                if (json.length) {
                     setPosts(json)
                     setPostsToShow(json)
                 }
             }) : navigate('*')
-    }, [])
+    }, [displayMorePosts])
+
+    
 
     function closePost() {
         navigate('../posts')
@@ -66,7 +69,7 @@ export default function Posts() {
                         "title": newPost.title,
                         "body": newPost.body
                     }]))
-                }).catch(error => console.log("Error", error))
+                }).catch(error => alert("Error", error))
             }
         }
     }
@@ -80,11 +83,10 @@ export default function Posts() {
         }).then(() => {
             setPosts(posts.filter(p => p.id != postId))
             setPostsToShow(postsToShow.filter(p => p.id != postId))
-        }).catch((error) => console.error("Error:", error));
+        }).catch((error) => alert("Error:", error));
     }
 
     function editPost(post, index) {
-        console.log(post.userId)
         let newPostTitle = prompt(`edit post ${post.id}:`, `${post.title}`)
         if (newPostTitle && newPostTitle != post.title) {
             let newPostBody = prompt(newPostTitle, post.body)
@@ -100,8 +102,8 @@ export default function Posts() {
                     return response.json()
                 }).then(() => {
                     setPosts(posts.filter(p => p == post ? newPosts[index] : p))
-                    if (showSelectByInput == '') setPostsToShow(postsToShow.filter(p => p == post ? newPosts[index] : p))
-                }).catch((error) => console.error("Error:", error));
+                    if (selectByInput == '') setPostsToShow(postsToShow.filter(p => p == post ? newPosts[index] : p))
+                }).catch((error) => alert("Error:", error));
             }
         }
     }
@@ -110,11 +112,11 @@ export default function Posts() {
         event.preventDefault()
         switch (event.target.value) {
             case "title": {
-                setShowSelectByInput('title')
+                setSelectByInput('title')
                 break;
             }
             case "id": {
-                setShowSelectByInput('id')
+                setSelectByInput('id')
                 break;
             }
         }
@@ -123,7 +125,7 @@ export default function Posts() {
     const searchBy = (event) => {
         event.preventDefault()
         if (event.target.value.length > 0)
-            switch (showSelectByInput) {
+            switch (selectByInput) {
                 case "title": {
                     setPostsToShow(posts.filter(a => a.title.includes(event.target.value)))
                     break;
@@ -151,15 +153,16 @@ export default function Posts() {
 
     return <>
         <button onClick={() => addPost()}>add post </button><br />
-        {!displayPost && showSelectByInput == '' && <select onChange={handleSelectBy}>
+
+        {!displayPost && selectByInput == '' && <select onChange={handleSelectBy}>
             <option value="" disabled selected hidden>select by...</option>
             <option value="id">Id</option>
             <option value="title">Title</option>
         </select>}
-        {showSelectByInput != '' && <input autoFocus onChange={searchBy}></input>}
-        {showSelectByInput != '' && <button onClick={() => { setShowSelectByInput(''), setPostsToShow(posts.slice()) }}>back</button>}
+        {selectByInput != '' && <input autoFocus onChange={searchBy}></input>}
+        {selectByInput != '' && <button onClick={() => { setSelectByInput(''), setPostsToShow(posts.slice()) }}>back</button>}
         {!displayPost && postsToShow && <h1>Posts:</h1>}
-        {!displayPost && postsToShow.map((post, i) => {
+        {!displayPost &&postsToShow.length&& postsToShow.map((post, i) => {
             return <div key={i}>
                 <h3>id:{post.id}  title:{post.title}</h3>
                 {user.id == post.userId && <><button onClick={() => deletePost(post.id)}>delete</button>
@@ -180,5 +183,6 @@ export default function Posts() {
         {displayComments && <Outlet />}
         {displayComments && <button onClick={() => closeComments()}>close comments</button>}
         {displayPost && <button onClick={() => closePost()}>close post</button>}
+        <button onClick={() => {setDisplayMorePosts(displayMorePosts + 5)}}>more posts </button><br />
     </>
 }

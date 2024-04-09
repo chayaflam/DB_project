@@ -13,14 +13,14 @@ export class CommentService {
         const queryComment = getByParamQuery("comments", "postId");
         const result = await executeQuery(queryComment, [postId]);
         result[0] ? console.log(`Getting comment of post ${postId} succeeded`) :
-            console.log(`Getting comment of post ${postId} failed`);
+            console.error(`Getting comment of post ${postId} failed`);
         return result;
     }
 
     async addComment(comment) {
         const queryComment = addQuery("comments", "NULL," + "?,".repeat((Object.keys(comment).length)) + "1");
         const result = await executeQuery(queryComment, Object.values(comment));
-        result.insertId ? console.log('Commnet added successfully') : console.log('Failed to add comment')
+        result.insertId ? console.log('Commnet added successfully') : console.error('Failed to add comment')
         return result;
     }
 
@@ -28,7 +28,7 @@ export class CommentService {
         const queryComment = deleteQuery("comments");
         const result = await executeQuery(queryComment, [commentId]);
         result.changedRows ? console.log(`Deleting comment ${commentId} succeeded`) :
-            console.log(`Deleting comment ${commentId} failed`);
+            console.error(`Deleting comment ${commentId} failed`);
         return result;
     }
 
@@ -36,7 +36,7 @@ export class CommentService {
         const queryComment = updateQuery("comments", Object.keys(comment));
         const result = await executeQuery(queryComment, Object.values(comment).concat(commentId));
         result.changedRows ? console.log(`Updating comment ${commentId} succeeded`) :
-            console.log(`Updating comment ${commentId} failed`);
+            console.error(`Updating comment ${commentId} failed`);
         return result;
     }
 }

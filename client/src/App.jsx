@@ -9,7 +9,7 @@ import Info from './components/Info';
 import Todos from './components/Todos';
 import Posts from './components/Posts';
 import Comments from './components/Comments';
-// import NoPage from './components/NoPage';
+import NoPage from './components/NoPage';
 
 
 export default function App() {
@@ -29,7 +29,7 @@ export default function App() {
               <Route path="comments" element={< Comments />} />
             </Route >
           </Route>
-          {/* <Route path="*" element={<NoPage />} />  */}
+          <Route path="*" element={<NoPage />} />
         </Routes>
       </div>
     </Router>

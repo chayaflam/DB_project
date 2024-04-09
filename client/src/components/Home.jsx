@@ -33,12 +33,11 @@ const Home = () => {
             return response.json()
         }).then(() => {
             setUpdate('');
-        }).catch((error) => console.error("Error:", error));
+        }).catch((error) => alert("Error:", error));
     }
 
     const verifyPassword = (data) => {
         let status;
-        console.log(user.username)
         fetch(`${URL}/auth/login`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -58,16 +57,16 @@ const Home = () => {
             <span>{buttons.map((btn, index) => { return <Link key={index} to={btn.toLowerCase()}><a onClick={() => setPlace(btn)}>{btn}</a></Link> })}</span>
             <button id="logout" onClick={() => logout()}>LOGOUT</button>
             <button id="logout" onClick={() => setUpdate('init')}>UPDATE PASSWORD</button>
-            {<><form onSubmit={update == 'init' ? handleSubmit(verifyPassword) : (update == 'continue' ? handleSubmit(updateUser) : <></>)}>
+            {update != '' && <> <form onSubmit={update == 'init' ? handleSubmit(verifyPassword) : (update == 'continue' ? handleSubmit(updateUser) : <></>)}>
                 {update == 'init' && <><label>enter your password</label>
-                    <input type="text" name="oldPassword" {...register("oldPassword")} required autoFocus ></input>
+                    <input type="password" name="oldPassword" {...register("oldPassword")} required autoFocus autoComplete="off"></input>
                     <input type="submit" value="verify" />
                 </>}
-                {update == 'continue' && <><label>new password</label> <input type="text" name="password" {...register("password")} required autoFocus></input><br />
-                    <label>verify new password</label><input type="text" name="verifyPassword" {...register("verifyPassword")} required ></input>
+                {update == 'continue' && <><label>new password</label> <input type="password" name="password" {...register("password")} required autoFocus autoComplete="off"></input><br />
+                    <label>verify new password</label><input type="password" name="verifyPassword" {...register("verifyPassword")} required  autoComplete="off"></input>
                     <input type="submit" value="submit" /></>}
             </form></>}
-        </nav>
+        </nav >
         <Outlet />
         {place == 'home' && <div></div>}
     </>

@@ -38,7 +38,7 @@ export default function Comments() {
                 }).then((response) => {
                     return response.json()
                 }).then(() => setComments(newComments))
-                    .catch((error) => console.error("Error:", error));
+                    .catch((error) => alert("Error:", error));
             }
         }
     }
@@ -49,7 +49,7 @@ export default function Comments() {
             body: JSON.stringify(commentId)
         }).then((response) => response.json())
             .then(() => setComments(comments.filter(c => c.id != commentId)))
-            .catch((error) => console.error("Error:", error));
+            .catch((error) => alert("Error:", error));
     }
 
     const addComment = () => {
@@ -75,7 +75,7 @@ export default function Comments() {
                         "email": user.email,
                         "body": newCommentBody
                     }]));
-                }).catch(error => console.log("Error", error))
+                }).catch(error => alert("Error", error))
             }
         }
     }

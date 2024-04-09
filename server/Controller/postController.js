@@ -6,7 +6,7 @@ export class PostController {
     async getPost(req, res, next) {
         try {
             const postService = new PostService();
-            const resultItems = await postService.getPost()
+            const resultItems = await postService.getPost(req.params.limit)
             return res.status(200).json(resultItems);
         }
         catch (ex) {
